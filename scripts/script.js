@@ -4,7 +4,7 @@ function init() {
   chamada();
 }
 
-
+// Função que faz chamada externa para ContentStack e retorna uma entry específica.
 function chamada(){
     var myHeaders = new Headers();
     myHeaders.append("api_key", "bltefa138b6241a5e0b");
@@ -25,21 +25,26 @@ function chamada(){
       .catch(error => console.log('error', error));
 }
 
+// Manipula a entry extraindo os campos a serem criados
 function manipulaJson(result){
   let json = JSON.parse(result);
   console.log(json);
 
+  // Extrai título da campanha
   let titulo = json.entry.title;
   criaCampoTitulo(titulo);
 
+  // Extrai o texto legal da campanha
   let texto = json.entry.texto_legal;
   criaCampoTexto(texto);
 
+  // Verifica se a campanha tem imagem
   if (json.entry.ilustracao != null) {
     let urlImg = json.entry.ilustracao.url
     criaImagem(urlImg)
   }
   
+  // Faz uma lista com os campos opcionais que haverá na campanha
   let fields = json.entry.campos_de_captura.campos_da_campanha;
   let array = Object.entries(fields);
   let lista = new Array();
@@ -59,6 +64,7 @@ function manipulaJson(result){
   criaCampos(lista);
 }
 
+// Função que verifica se uma variável é um objeto
 function isObject(obj) {
   if (obj === Object(obj)) {
     return true;
@@ -66,6 +72,7 @@ function isObject(obj) {
   return false;
 }
 
+// Função que recebe uma lista de campos e determina quais campos serão criados
 function criaCampos(lista){
   lista.forEach(element => {
     if (isObject(element)) {
@@ -107,6 +114,7 @@ function criaCampos(lista){
 
 }
 
+// Funções de criação de campos
 function criaCampoTitulo(titulo) {
   $(".titulo").append(`<h2 style="font-size: 72px;">${titulo}</h2>`);
 }
@@ -144,6 +152,7 @@ function criaImagem(urlImagem){
   $(".imagem").append( `<img class='camp' src='${urlImagem}' alt='imagem campanha'>`)
 }
 
+// Funções de verificação de campos e máscaras
 function verificaNome(nome) {
   var regex = new RegExp("[^0-9]")
   if (!regex.test(nome)){
